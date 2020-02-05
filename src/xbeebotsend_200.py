@@ -53,8 +53,14 @@ count3 = [0,0,0]
 count4 = [0,0,0]
 
 
+def killswitch():
+    s1 = str(0) + ':' + str(0) + ':' + str(0) +':'+str(0) +':'+str(0) +':'
+    s2 = str(0) + ':' + str(0) + ':' + str(0) +':'+str(0) +':'+str(0) +':'
+    s3 = str(0) + ':' + str(0) + ':' + str(0) +':'+str(0) +':'+str(0) +':'
+    s4 = str(0) + ':' + str(0) + ':' + str(0) +':'+str(0) +':'+str(0) +':'
+    s = s1+s2+s3+s4
+    sent = xbee.SendStr(s.encode())
 
-   
 def torque_encode(w1,w2,w3,state,count):
     '''
     w1,w2,w3 = target pwm(-255,255)
@@ -292,6 +298,7 @@ def run():
     global k3
     global k4
     rospy.init_node('listener', anonymous=True)
+    rospy.on_shutdown(killswitch)
     rate = rospy.Rate(10)
     rospy.Subscriber("bot1twist", Twist, b1t)
     rospy.Subscriber("bot2twist", Twist, b2t)
@@ -313,11 +320,7 @@ def run():
         s2= str(w1b2) + ':' + str(w2b2) + ':' + str(w3b2) +':'+str(d2) +':'+str(k2) +':'
         s3= str(w1b3) + ':' + str(w2b3) + ':' + str(w3b3) +':'+str(d3) +':'+str(k3) +':'
         s4= str(w1b4) + ':' + str(w2b4) + ':' + str(w3b4) +':'+str(d4) +':'+str(k4) +':'
-        print 's1',s1
         s = s1+s2+s3+s4
-        print 's2',s2
-        print 's3',s3
-        print 's4',s4
         sent = xbee.SendStr(s.encode())    
         rate.sleep()
 
